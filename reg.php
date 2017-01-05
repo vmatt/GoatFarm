@@ -2,12 +2,12 @@
 .error {color: #FF0000;}
 </style>
 <?php
-$nameErr = $emailErr = $genderErr = $passErr = "";
-$name = $email = $gender = $pass = "";
+$nameErr = $emailErr = $genderErr = $passErr = $typeErr = $nemErr = "";
+$name = $email = $gender = $pass = $type = $nem = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if (empty($_POST["name"])) {
-    $nameErr = "Name is required";
+    $nameErr = "kell név";
   } else {
     $name = test_input($_POST["name"]);
     if (!preg_match("/^[a-zA-Z0-9]*$/",$name)) {
@@ -36,6 +36,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   } else {
     $gender = test_input($_POST["gender"]);
   }
+  if (empty($_POST["type"])) {
+    $typeErr = "válassz típust";
+  } else {
+    $type = test_input($_POST["type"]);
+  }
+  if (empty($_POST["nem"])) {
+    $nemErr = "válassz nemet";
+  } else {
+    $nem = test_input($_POST["nem"]);
+  }
 }
 
 function test_input($data) {
@@ -54,41 +64,42 @@ function test_input($data) {
   E-mail: <input type="text" name="email" value="<?php echo $email;?>">
   <span class="error">* <?php echo $emailErr;?></span>
   <br><br>
-  Jelszó: <input type="text" name="pass" value="<?php echo $pass;?>">
+  Jelszó: <input type="password" name="pass" value="<?php echo $pass;?>">
   <span class="error">* <?php echo $passErr;?></span>
   <br><br>
   Típus:
-  <input type="radio" name="gender" <?php if (isset($gender) && $gender=="kecske") echo "ok";?> value="kecske">Kecske
+  <input type="radio" name="gender" <?php if (isset($gender) && $gender=="kecske") echo "ok";?> value="kecske" checked>Kecske
   <input type="radio" name="gender" <?php if (isset($gender) && $gender=="bojler") echo "ok";?> value="bojler">Bojler
   <input type="radio" name="gender" <?php if (isset($gender) && $gender=="heli") echo "ok";?> value="heli">Apache
   <span class="error">* <?php echo $genderErr;?></span>
+  <br><br>
+  Típus2:
+  <input type="radio" name="type" <?php if (isset($type) && $type=="1") echo "ok";?> value="1" checked>ver1
+  <input type="radio" name="type" <?php if (isset($type) && $type=="2") echo "ok";?> value="2">ver2
+  <span class="error">* <?php echo $typeErr;?></span>
+  <br><br>
+  Nem:
+  <input type="radio" name="nem" <?php if (isset($nem) && $nem=="him") echo "ok";?> value="him" checked>Hím
+  <input type="radio" name="nem" <?php if (isset($nem) && $nem=="nosteny") echo "ok";?> value="nosteny">Nőstény
+  <span class="error">* <?php echo $nemErr;?></span>
   <br><br>
   <input type="submit" name="submit" value="Regisztrálok">  
 </form>
 
 <?php
+include 'sqlhelper.php';
 if (isset($gender) && $name != "" && $pass != "" && $email != "")
 	{
 		session_start();
-		$servername = "localhost";
-		$username = "root";
-		$password = "root";
-		$dbname = "nevelde";
-
-		$conn = new mysqli($servername, $username, $password, $dbname);
-
-		if ($conn->connect_error) 
-		{
-			die("Connection failed: " . $conn->connect_error);
-		} 
-		$sql = "INSERT INTO alap (user, email, pass, type, lvl)
-		VALUES ('" . $name ."', '" . $email . "', '" . $pass . "', '" . $gender . "', 1)";
-
-		if ($conn->query($sql) === TRUE) {
+		
+		$myusername = hash('sha256', $name);
+		$mypassword = hash('sha256', $pass);
+		$sql = "INSERT INTO alap (user, email, pass, type, lvl, faj, gender)
+		VALUES ('" . $myusername ."', '" . $email . "', '" . $mypassword . "', '" . $gender . "', 1, ".$type.", '".$nem."')";
+		if (runSql($sql) === TRUE) {
 		echo "sikeres reg.";
 		} else {
-			echo "hiba: " . $sql . "<br>" . $conn->error;
+			echo "hiba: " . $sql;
 		}
-		$conn->close();
 	}
 ?>
