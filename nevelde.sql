@@ -28,15 +28,17 @@ DROP TABLE IF EXISTS `alap`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `alap` (
   `idalap` int(11) NOT NULL auto_increment,
-  `user` varchar(25) NOT NULL,
+  `user` varchar(64) NOT NULL,
   `email` varchar(50) NOT NULL,
-  `pass` varchar(45) NOT NULL,
+  `pass` varchar(64) NOT NULL,
   `type` enum('kecske','bojler','heli') NOT NULL,
   `lvl` int(11) NOT NULL default '1',
+  `faj` int(2) NOT NULL default '1',
+  `gender` enum('him','nosteny') NOT NULL,
   PRIMARY KEY  (`idalap`),
   UNIQUE KEY `user_UNIQUE` (`user`),
   UNIQUE KEY `email_UNIQUE` (`email`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45,7 +47,7 @@ CREATE TABLE `alap` (
 
 LOCK TABLES `alap` WRITE;
 /*!40000 ALTER TABLE `alap` DISABLE KEYS */;
-INSERT INTO `alap` VALUES (1,'admin','admin@localhost','nimda','kecske',1),(2,'asd','asd@localhost','dsa','bojler',1),(3,'dsa','dsa@asd.asd','asd123','heli',1);
+INSERT INTO `alap` VALUES (1,'8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918','admin@localhost.com','37bd45d638c2d11c49c641d2e9c4f49f406caf3ee282743e0c800aa1ed68e2ee','kecske',1,1,'him'),(7,'688787d8ff144c502c7f5cffaafe2cc588d86079f9de88304c26b0cb99ce91c6','asd@asd.asd','688787d8ff144c502c7f5cffaafe2cc588d86079f9de88304c26b0cb99ce91c6','bojler',1,1,'him');
 /*!40000 ALTER TABLE `alap` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -58,4 +60,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-01-03 21:56:37
+-- Dump completed on 2017-01-05 18:46:37
