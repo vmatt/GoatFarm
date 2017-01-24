@@ -16,6 +16,9 @@ if($count == 1)
 {
     $_SESSION["belepve"] = "igen";
     $_SESSION["user"] = $_POST['username'];
+	initLogin($myusername);
+	updateKaja($myusername);
+	updatePia($myusername);
     echo "Sikeres belépés.";
     echo '<script>setTimeout(function() {window.location = "main.php";}, 1500);</script>';
 }
