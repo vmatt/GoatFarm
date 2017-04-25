@@ -2,8 +2,8 @@
 .error {color: #FF0000;}
 </style>
 <?php
-$nameErr = $emailErr = $genderErr = $passErr = $typeErr = $nemErr = "";
-$name = $email = $gender = $pass = $type = $nem = "";
+$nameErr = $emailErr = $typeErr = $passErr = $typeErr = $nemErr = "";
+$name = $email = $type = $pass = $type = $nem = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if (empty($_POST["name"])) {
@@ -31,13 +31,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $pass = test_input($_POST["pass"]);
   }
 
-  if (empty($_POST["gender"])) {
-    $genderErr = "Hiányzó típus!";
-  } else {
-    $gender = test_input($_POST["gender"]);
-  }
   if (empty($_POST["type"])) {
-    $typeErr = "Hiányzó típus!";
+    $typeErr = "Hiányzó faj!";
   } else {
     $type = test_input($_POST["type"]);
   }
@@ -83,18 +78,13 @@ function test_input($data) {
 			<p>Jelszó: <span class="error">* <?php echo $passErr;?></span></p>
 			<input class="form-control" type="password" name="pass" value="<?php echo $pass;?>">
 			
-			<p>Típus: <span class="error">* <?php echo $genderErr;?></span></p>
+			<p>Faj: <span class="error">* <?php echo $typeErr;?></span></p>
 			<div class="row">
-				<input style="margin-left: 15px;" type="radio" id="kecske" name="gender" <?php if (isset($gender) && $gender=="kecske") echo "ok";?> value="kecske" checked><label for="kecske"> Kecske</label>
-				<input style="margin-left: 15px;" type="radio" id="bojler" name="gender" <?php if (isset($gender) && $gender=="bojler") echo "ok";?> value="bojler"><label for="bojler"> Bojler</label>
-				<input style="margin-left: 15px;" type="radio" id="heli" name="gender" <?php if (isset($gender) && $gender=="heli") echo "ok";?> value="heli"><label for="heli"> Apache</label>
+				<input style="margin-left: 15px;" type="radio" id="kecske" name="gender" <?php if (isset($type) && $type=="kecske") echo "ok";?> value="kecske" checked><label for="kecske"> Kecske</label>
+				<input style="margin-left: 15px;" type="radio" id="bojler" name="gender" <?php if (isset($type) && $type=="bojler") echo "ok";?> value="bojler"><label for="bojler"> Bojler</label>
+				<input style="margin-left: 15px;" type="radio" id="kutya" name="gender" <?php if (isset($type) && $type=="kutya") echo "ok";?> value="kutya"><label for="kutya">Kétfarkú Kutya</label>
 			</div>
 			
-			<p>Típus2: <span class="error">* <?php echo $typeErr;?></span></p>
-			<div class="row">
-				<input style="margin-left: 15px;" id="ver1" type="radio" name="type" <?php if (isset($type) && $type=="1") echo "ok";?> value="1" checked><label for="ver1"> ver1</label>
-				<input style="margin-left: 15px;" id="ver2" type="radio" name="type" <?php if (isset($type) && $type=="2") echo "ok";?> value="2"><label for="ver2"> ver2</label>
-			</div>
 			
 			<p>Nem: <span class="error">* <?php echo $nemErr;?></span></p>
 			<div class="row">
@@ -112,18 +102,17 @@ function test_input($data) {
 </body>
 <?php
 include 'sqlhelper.php';
-if (isset($gender) && $name != "" && $pass != "" && $email != "")
+if (isset($type) && $name != "" && $pass != "" && $email != "")
 	{
-		session_start();
-		
-		$myusername = hash('sha256', $name);
+		session_start();		
 		$mypassword = hash('sha256', $pass);
-		$sql = "INSERT INTO alap (user, email, pass, type, lvl, faj, gender)
-		VALUES ('" . $myusername ."', '" . $email . "', '" . $mypassword . "', '" . $gender . "', 1, ".$type.", '".$nem."')";
+		$sql = "INSERT INTO alap (user, email, pass, type, lvl, gender)
+		VALUES ('" . $name ."', '" . $email . "', '" . $mypassword . "', '" . $type . "', 1, '".$nem."')";
 		if (runSql($sql) === TRUE) {
 		echo "sikeres reg.";
 		} else {
 			echo "hiba: " . $sql;
 		}
 	}
+
 ?>

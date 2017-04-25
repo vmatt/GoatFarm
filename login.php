@@ -1,32 +1,33 @@
 <?php
 include 'sqlhelper.php';
 session_start();
-error_reporting(0);
-$myusername = hash('sha256', $_POST['username']);
-$mypassword = hash('sha256', $_POST['pass']);
-
-$sql = "SELECT idalap FROM alap WHERE user = '".$myusername."' and pass = '".$mypassword."'";
-
+//$username = $_POST['username'];
+$username = $_POST['username'];
+$hashed_password = hash('sha256', $_POST['pass']);
+$sql = "SELECT idalap FROM alap WHERE user = '".$username."' and pass = '".$hashed_password."'";
 $result = runSql($sql);
 $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
-$active = $row['active'];
+
+//mail aktiváció - UD
+$active = $row['activated'];
+//van-e egyező felhaszánló
 $count = mysqli_num_rows($result);
 		
 if($count == 1) 
 {
-    $_SESSION["belepve"] = "igen";
-    $_SESSION["user"] = $_POST['username'];
-	initLogin($myusername);
-	updateKaja($myusername);
-	updatePia($myusername);
-    echo "Sikeres belépés.";
-    echo '<script>setTimeout(function() {window.location = "main.php";}, 1500);</script>';
+  $_SESSION["belepve"] = "igen";
+	$_SESSION["user"] = $_POST['username'];
+	initLogin($username);
+	updateKaja($username);
+	updatePia($username);
+  echo "Sikeres belépés.";
+  echo '<script>setTimeout(function() {window.location = "main.php";}, 150);</script>';
 }
 else 
 {
 	echo "Helytelen belépés";
-    echo '<script>alert("Helytelen belépés.");setTimeout(function() {window.location = "index.html";}, 2500);</script>';
+    echo '<script>setTimeout(function() {window.location = "index.html";}, 2500);</script>';
 	//header("location: index.html");
 }
-
+	
 ?>

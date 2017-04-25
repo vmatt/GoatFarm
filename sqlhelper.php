@@ -2,8 +2,8 @@
 function runSql($parancs)
 	{
 	$servername = "localhost";
-	$username = "root";
-	$password = "root";
+	$username = "demo";
+	$password = "asdlolxd";
 	$dbname = "demo";
 	$conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -24,7 +24,7 @@ function getVar($table,$var,$user)
 }
 function isPremium($user)
 {
-	$active = getVar('extended','premium',$user);
+	$active = getVar('alap','premium',$user);
 	if($active == 1)
 	{
 		return true;
@@ -33,65 +33,65 @@ function isPremium($user)
 }
 function updateKaja($user)
 {
-	$hunger = getVar('extended','hunger',$user);
-	$lastkaja = getVar('extended','lastkaja',$user);
-	if (((time() - $lastkaja) / 600) >= 1)
+	$hunger = getVar('alap','hunger',$user);
+	$lastEat = getVar('alap','lastEat',$user);
+	if (((time() - $lastEat) / 600) >= 1)
 	{
-		if ($hunger - ((time() - $lastkaja) / 600) > 0)
+		if ($hunger - ((time() - $lastEat) / 600) > 0)
 		{
-		runSql("UPDATE extended SET hunger='".(100 - ((time() - $lastkaja) / 600))."' WHERE user='".$user."'");
+		runSql("UPDATE alap SET hunger='".(100 - ((time() - $lastEat) / 600))."' WHERE user='".$user."'");
 		}
 		else
 		{
-		runSql("UPDATE extended SET hunger='0' WHERE user='".$user."'");
+		runSql("UPDATE alap SET hunger='0' WHERE user='".$user."'");
 		}
 	}
 }
 function updatePia($user)
 {
-	$szomj = getVar('extended','szomj',$user);
-	$lastpia = getVar('extended','lastpia',$user);
-	if (((time() - $lastpia) / 600) >= 1)
+	$szomj = getVar('alap','szomj',$user);
+	$lastDrink = getVar('alap','lastDrink',$user);
+	if (((time() - $lastDrink) / 600) >= 1)
 	{
-		if ($szomj - ((time() - $lastpia) / 600) > 0)
+		if ($szomj - ((time() - $lastDrink) / 600) > 0)
 		{
-		runSql("UPDATE extended SET szomj='".(100 - ((time() - $lastpia) / 600))."' WHERE user='".$user."'");
+		runSql("UPDATE alap SET szomj='".(100 - ((time() - $lastDrink) / 600))."' WHERE user='".$user."'");
 		}
 		else
 		{
-		runSql("UPDATE extended SET szomj='0' WHERE user='".$user."'");
+		runSql("UPDATE alap SET szomj='0' WHERE user='".$user."'");
 		}
 	}
 }
 function addXp($user, $xp)
 {
-	$currentxp = getVar('extended','xp',$user);
-	runSql("UPDATE extended SET xp='".$currentxp + $xp."' WHERE user='".$user."'");
+	$currentxp = getVar('alap','xp',$user);
+	runSql("UPDATE alap SET xp='".$currentxp + $xp."' WHERE user='".$user."'");
 }
 function addMoney($user, $money)
 {
-	$currentmoney = getVar('extended','money',$user);
-	runSql("UPDATE extended SET money='".$currentmoney + $money."' WHERE user='".$user."'");
+	$currentmoney = getVar('alap','money',$user);
+	runSql("UPDATE alap SET money='".$currentmoney + $money."' WHERE user='".$user."'");
 }
 function initLogin($user)
 {
-	$result = runSql("SELECT user FROM extended WHERE user = '".$user."'");
+	$result = runSql("SELECT user FROM alap WHERE user = '".$user."'");
 	$row = mysqli_fetch_array($result,MYSQLI_ASSOC);
 	$active = $row['active'];
 	$count = mysqli_num_rows($result);
 	if($count == 0) 
 	{
-	$sql = "INSERT INTO extended (user, xp, money, premium, szomj, hunger, lastkaja, lastpia)
+	$sql = "INSERT INTO alap (user, xp, money, premium, szomj, hunger, lastEat, lastDrink)
 		VALUES ('" . $user ."', '0', '0', '0', 100, 100, 0, 0)";
 		runSql($sql);
 	}
 }
-function kajol($user)
+function eat($user)
 {
-	runSql("UPDATE extended SET hunger='100',lastkaja=".time()." WHERE user='".$user."'");
+	runSql("UPDATE alap SET hunger='100',lastEat=".time()." WHERE user='".$user."'");
 }
-function iszik($user)
+function drink($user)
 {
-	runSql("UPDATE extended SET szomj='100',lastpia=".time()." WHERE user='".$user."'");
+	runSql("UPDATE alap SET szomj='100',lastDrink=".time()." WHERE user='".$user."'");
 }
 ?>

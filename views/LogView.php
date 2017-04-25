@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+<?php 
+function renderHTML () {
+	return '<!DOCTYPE html>
 <html lang="hu">
 <head>
     <meta charset="utf-8">
@@ -14,15 +16,9 @@
 	<link rel="stylesheet" href="css/index.css">
 </head>
 <body>
-	<!--<form style="text-align: center;" method="POST" action="login.php">
-	  Username: <input type="text" name="username" placeholder="Felfasználó" required/><br />
-	  Password: <input type="password" name="pass" placeholder="*********" required/><br />
-		<p><input type="submit" value="Login" /></p>
-		<a href="reg.php">Regisztráció</a>
-	</form>-->
+
 	<div class="row">
 		<form class="form-signin" style="text-align: center;" method="POST" action="login.php">       
-			<!--<h2 class="form-signin-heading">Login</h2>-->
 			<img class="logo_img" src="img/kecskelogo1.png" />
 			<input type="text" class="form-control" name="username" placeholder="Felhasználónév" required />
 			<input type="password" class="form-control" name="pass" placeholder="Jelszó" required/>      
@@ -32,4 +28,5 @@
 	</div>
 
 </body>
-</html>
+</html>';
+}
