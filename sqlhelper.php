@@ -1,15 +1,9 @@
 <?php
-
 function runSql($parancs)
 	{
 	$servername = "localhost";
-<<<<<<< HEAD
 	$username = "demo";
 	$password = "asdlolxd";
-=======
-	$username = "root";
-	$password = "root";
->>>>>>> 568547951b4c6aeb908e7ace91b18c83acb4f354
 	$dbname = "demo";
 	$conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -19,36 +13,7 @@ function runSql($parancs)
 	$result = $conn->query($parancs);
 	$conn->close();
 	return ($result);
-  }
-
-function loginToSite($username,$hashed_password)
-{
-$sql = "SELECT idalap FROM alap WHERE user = '".$username."' and pass = '".$hashed_password."'";
-
-$result = runSql($sql);
-$row = mysqli_fetch_array($result,MYSQLI_ASSOC);
-$active = $row['active'];
-$count = mysqli_num_rows($result);
-		
-if($count == 1) 
-{
-  $_SESSION["belepve"] = "igen";
-	$_SESSION["user"] = $_POST['username'];
-	initLogin($username);
-	updateKaja($username);
-	updatePia($username);
-  echo "Sikeres belépés.";
-  echo '<script>setTimeout(function() {window.location = "main.php";}, 1500);</script>';
-}
-else 
-{
-	echo "Helytelen belépés";
-    echo '<script>alert("Helytelen belépés.");setTimeout(function() {window.location = "index.html";}, 2500);</script>';
-	//header("location: index.html");
-}
-	
-}
-
+    }
 function getVar($table,$var,$user)
 {
 	$sql = "SELECT ".$var." FROM ".$table." WHERE user = '".$user."'";
